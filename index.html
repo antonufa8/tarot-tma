@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cyber Tarot Portal</title>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #090a10;
+      --card-bg: #141624;
+      --accent: #8a2be2;
+      --accent-glow: #00f2fe;
+      --gold: #ffd700;
+      --text: #f0f3f8;
+      --text-muted: #8e95aa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #191c38 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00f2fe, #4facfe, #8a2be2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Query Box */
+    .query-card {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(20, 22, 36, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: rgba(10, 11, 18, 0.8);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s;
+      user-select: text;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-glow);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Slots */
+    .slots-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .slot {
+      flex: 1;
+      aspect-ratio: 2/3;
+      border: 1.5px dashed rgba(138, 43, 226, 0.4);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      text-align: center;
+      background: rgba(20, 22, 36, 0.3);
+      position: relative;
+    }
+
+    .slot-label {
+      font-size: 10px;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* Interactive Card Grid */
+    .deck-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #c4b5fd;
+    }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 80px;
+    }
+
+    /* Card 3D Flip */
+    .tarot-card {
+      aspect-ratio: 2/3;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 10px;
+    }
+
+    .tarot-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #1b1035, #0d071e);
+      border: 1px solid rgba(138, 43, 226, 0.5);
+      color: var(--accent-glow);
+      font-size: 20px;
+    }
+
+    .card-back::after {
+      content: "✦";
+      font-size: 16px;
+      color: var(--gold);
+    }
+
+    .card-front {
+      background: linear-gradient(145deg, #1f2238, #111322);
+      border: 1.5px solid var(--gold);
+      transform: rotateY(180deg);
+      justify-content: space-between;
+    }
+
+    .card-glyph {
+      font-size: 24px;
+      margin-top: 4px;
+    }
+
+    .card-name {
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    /* Bottom Action Button */
+    .action-btn {
+      position: fixed;
+      bottom: 20px;
+      width: calc(100% - 32px);
+      max-width: 400px;
+      background: linear-gradient(135deg, #8a2be2, #00f2fe);
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 24px rgba(138, 43, 226, 0.5);
+      cursor: pointer;
+      opacity: 0.4;
+      pointer-events: none;
+      transition: all 0.3s;
+    }
+
+    .action-btn.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Cyber Tarot</h1>
+    <p class="subtitle">AI-Оракул Нового Поколения</p>
+  </header>
+
+  <div class="query-card">
+    <input type="text" id="userQuery" placeholder="Сформулируйте запрос или вопрос..." />
+  </div>
+
+  <div class="slots-container">
+    <div class="slot" id="slot-0">
+      <span class="slot-label">Истоки</span>
+      <span style="font-size:12px; color: var(--text-muted);">I</span>
+    </div>
+    <div class="slot" id="slot-1">
+      <span class="slot-label">Вызов</span>
+      <span style="font-size:12px; color: var(--text-muted);">II</span>
+    </div>
+    <div class="slot" id="slot-2">
+      <span class="slot-label">Вектор</span>
+      <span style="font-size:12px; color: var(--text-muted);">III</span>
+    </div>
+  </div>
+
+  <div class="deck-title">Выберите 3 карты из колоды:</div>
+  <div class="deck-grid" id="deckGrid"></div>
+
+  <button class="action-btn" id="sendBtn">Получить разбор</button>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    const ARCANA = [
+      { name: "Шут", glyph: "🃏" },
+      { name: "Маг", glyph: "🪄" },
+      { name: "Жрица", glyph: "🌙" },
+      { name: "Императрица", glyph: "👑" },
+      { name: "Император", glyph: "🏛" },
+      { name: "Иерофант", glyph: "🗝" },
+      { name: "Влюбленные", glyph: "❤️" },
+      { name: "Колесница", glyph: "⚡" },
+      { name: "Сила", glyph: "🦁" },
+      { name: "Отшельник", glyph: "🏮" },
+      { name: "Колесо Фортуны", glyph: "☸️" },
+      { name: "Справедливость", glyph: "⚖️" }
+    ];
+
+    // Перемешиваем колоду
+    const deck = [...ARCANA].sort(() => Math.random() - 0.5);
+    const selectedCards = [];
+    const deckGrid = document.getElementById("deckGrid");
+    const sendBtn = document.getElementById("sendBtn");
+    const userQueryInput = document.getElementById("userQuery");
+
+    // Отрисовка колоды
+    deck.forEach((card, index) => {
+      const cardEl = document.createElement("div");
+      cardEl.className = "tarot-card";
+      cardEl.innerHTML = `
+        <div class="card-inner">
+          <div class="card-back"></div>
+          <div class="card-front">
+            <div class="card-glyph">${card.glyph}</div>
+            <div class="card-name">${card.name}</div>
+          </div>
+        </div>
+      `;
+
+      cardEl.addEventListener("click", () => selectCard(cardEl, card));
+      deckGrid.appendChild(cardEl);
+    });
+
+    function selectCard(element, card) {
+      if (element.classList.contains("flipped") || selectedCards.length >= 3) return;
+
+      // Haptic feedback в Telegram
+      tg?.HapticFeedback?.impactOccurred("medium");
+
+      element.classList.add("flipped");
+      selectedCards.push(card.name);
+
+      // Обновляем слот
+      const slotIndex = selectedCards.length - 1;
+      const slot = document.getElementById(`slot-${slotIndex}`);
+      slot.innerHTML = `
+        <span class="slot-label">${slotIndex === 0 ? "Истоки" : slotIndex === 1 ? "Вызов" : "Вектор"}</span>
+        <div style="font-size:20px; margin:2px 0;">${card.glyph}</div>
+        <div style="font-size:10px; font-weight:700; color:#fff;">${card.name}</div>
+      `;
+      slot.style.border = "1.5px solid var(--gold)";
+      slot.style.background = "rgba(138, 43, 226, 0.2)";
+
+      if (selectedCards.length === 3) {
+        sendBtn.classList.add("active");
+        tg?.HapticFeedback?.notificationOccurred("success");
+      }
+    }
+
+    sendBtn.addEventListener("click", () => {
+      if (selectedCards.length < 3) return;
+
+      const payload = {
+        query: userQueryInput.value.trim() || "Общая ситуация и жизненный баланс",
+        cards: selectedCards
+      };
+
+      tg?.HapticFeedback?.impactOccurred("heavy");
+      
+      // Отправляем данные в бота
+      if (tg && tg.sendData) {
+        tg.sendData(JSON.stringify(payload));
+      } else {
+        alert("Данные для бота: " + JSON.stringify(payload));
+      }
+    });
+  </script>
+</body>
+</html>
