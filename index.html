@@ -317,24 +317,24 @@
       margin-bottom: 14px;
       line-height: 1.4;
     }
-    /* Анимированный SVG Логотип */
-    .logo-container {
+  /* Выравнивание заголовка и логотипов в одну линию */
+    .title-row {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 12px;
-    }
-    
-    .logo-svg {
-      width: 70px;
-      height: 70px;
-      filter: drop-shadow(0 0 12px rgba(157, 78, 221, 0.6));
-      animation: float 3.5s ease-in-out infinite;
+      gap: 12px;
+      margin-bottom: 4px;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px rgba(157, 78, 221, 0.4)); }
-      50% { transform: translateY(-8px); filter: drop-shadow(0 0 18px rgba(224, 170, 255, 0.8)); }
+    /* Статичный логотип AI-искры */
+    .logo-svg {
+      width: 26px;
+      height: 26px;
+      filter: drop-shadow(0 0 6px rgba(157, 78, 221, 0.4));
+    }
+    
+    .right-logo {
+      transform: scaleX(-1); /* Зеркалим правую искру для симметрии */
     }
 
     /* Подписи к зонам карт */
@@ -356,27 +356,33 @@
 <body>
 
 <header>
-    <div class="logo-container">
-      <!-- Неоновый SVG Логотип "Нити Судьбы" -->
-      <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Внешний ромб -->
-        <path d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#paint0_linear)" stroke-width="2"/>
-        <!-- Внутренняя сфера -->
-        <circle cx="50" cy="50" r="22" fill="#e0aaff" fill-opacity="0.1" stroke="#9d4edd" stroke-width="1.5"/>
-        <!-- Нити судьбы (пересечения) -->
-        <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M25 75 L75 25" stroke="#ffb703" stroke-width="1" stroke-dasharray="2 4" opacity="0.7"/>
-        <!-- Золотое ядро оракула -->
-        <circle cx="50" cy="50" r="6" fill="#ffb703" filter="drop-shadow(0 0 5px #ffb703)"/>
-        <!-- Градиент -->
+    <div class="title-row">
+      <!-- Левый логотип (AI-искра) -->
+      <svg class="logo-svg left-logo" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#paint0_linear)"/>
+        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
         <defs>
-          <linearGradient id="paint0_linear" x1="5" y1="5" x2="95" y2="95" gradientUnits="userSpaceOnUse">
+          <linearGradient id="paint0_linear" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00f2fe"/>
+            <stop offset="1" stop-color="#9d4edd"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <h1>Нити Судьбы</h1>
+
+      <!-- Правый логотип (AI-искра) -->
+      <svg class="logo-svg right-logo" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#paint0_linear)"/>
+        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
+        <defs>
+          <linearGradient id="paint0_linear" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
             <stop stop-color="#00f2fe"/>
             <stop offset="1" stop-color="#9d4edd"/>
           </linearGradient>
         </defs>
       </svg>
     </div>
-    <h1>Нити Судьбы</h1>
     <p class="subtitle">Твой персональный цифровой Оракул</p>
   </header>
 
@@ -408,12 +414,12 @@
     <div class="slot" id="slot-2"><span class="slot-num">Совет</span></div>
   </div>
 
-  <!-- Подпись зоны самой колоды -->
-  <div class="zone-label">▼ Колода (Нажмите для выбора) ▼</div>
-
+  <!-- Подпись зоны самой колоды (добавлен ID) -->
+  <div class="zone-label" id="deckLabel">▼ Колода (Нажмите для выбора) ▼</div>
+  
   <!-- Интерактивная колода -->
   <div class="deck-grid" id="deckGrid"></div>
-
+  
   <!-- Анимация загрузки -->
   <div class="loading-box" id="loader">
     <div class="orb"></div>
@@ -428,6 +434,7 @@
   </div>
 
   <script>
+    const deckLabel = document.getElementById("deckLabel");
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
@@ -499,7 +506,7 @@
       });
     }
 
-    function pickCard(el, card) {
+function pickCard(el, card) {
       if (el.classList.contains("flipped") || selectedCards.length >= 3) return;
 
       tg?.HapticFeedback?.impactOccurred("medium");
@@ -519,7 +526,10 @@
       if (selectedCards.length === 3) {
         tg?.HapticFeedback?.notificationOccurred("success");
         deckGrid.style.display = "none";
+        deckLabel.style.display = "none"; // <--- ПРЯЧЕМ НАДПИСЬ
         fetchReading();
+      }
+    }
       }
     }
 
@@ -552,6 +562,8 @@
     function resetSpread() {
       resultCard.style.display = "none";
       deckGrid.style.display = "grid";
+      deckLabel.style.display = "block"; // <--- ВОЗВРАЩАЕМ НАДПИСЬ
+
       document.querySelectorAll(".slot").forEach((s, i) => {
         s.innerHTML = `<span class="slot-num">${i === 0 ? "Суть" : i === 1 ? "Фокус" : "Совет"}</span>`;
         s.style.border = "1.5px dashed rgba(157, 78, 221, 0.4)";
