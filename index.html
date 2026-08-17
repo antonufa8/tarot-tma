@@ -484,6 +484,19 @@
         resetSpread();
       }
     });
+    
+    // НОВАЯ ЛОГИКА: Очищаем поле при клике и убираем активную кнопку
+    queryInput.addEventListener("focus", () => {
+      queryInput.value = ""; // Стираем текущий текст
+      
+      // Снимаем выделение со всех кнопок-тем, так как человек вводит свой вопрос
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      
+      // Если расклад уже был сделан, сбрасываем стол
+      if (selectedCards.length === 3) {
+        resetSpread();
+      }
+    });
     function initDeck() {
       deckGrid.innerHTML = "";
       selectedCards = [];
