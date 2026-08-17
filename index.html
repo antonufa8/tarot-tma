@@ -317,11 +317,65 @@
       margin-bottom: 14px;
       line-height: 1.4;
     }
+    /* Анимированный SVG Логотип */
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .logo-svg {
+      width: 70px;
+      height: 70px;
+      filter: drop-shadow(0 0 12px rgba(157, 78, 221, 0.6));
+      animation: float 3.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px rgba(157, 78, 221, 0.4)); }
+      50% { transform: translateY(-8px); filter: drop-shadow(0 0 18px rgba(224, 170, 255, 0.8)); }
+    }
+
+    /* Подписи к зонам карт */
+    .zone-label {
+      width: 100%;
+      max-width: 400px;
+      font-size: 11px;
+      color: #a78bfa;
+      text-align: center;
+      margin-bottom: 8px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.85;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
 
 <header>
+    <div class="logo-container">
+      <!-- Неоновый SVG Логотип "Нити Судьбы" -->
+      <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Внешний ромб -->
+        <path d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#paint0_linear)" stroke-width="2"/>
+        <!-- Внутренняя сфера -->
+        <circle cx="50" cy="50" r="22" fill="#e0aaff" fill-opacity="0.1" stroke="#9d4edd" stroke-width="1.5"/>
+        <!-- Нити судьбы (пересечения) -->
+        <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M25 75 L75 25" stroke="#ffb703" stroke-width="1" stroke-dasharray="2 4" opacity="0.7"/>
+        <!-- Золотое ядро оракула -->
+        <circle cx="50" cy="50" r="6" fill="#ffb703" filter="drop-shadow(0 0 5px #ffb703)"/>
+        <!-- Градиент -->
+        <defs>
+          <linearGradient id="paint0_linear" x1="5" y1="5" x2="95" y2="95" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00f2fe"/>
+            <stop offset="1" stop-color="#9d4edd"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
     <h1>Нити Судьбы</h1>
     <p class="subtitle">Твой персональный цифровой Оракул</p>
   </header>
@@ -330,7 +384,6 @@
   <div class="step-label">Шаг 1: Фокус запроса</div>
   <div class="hint-text">Выберите готовую тему (смахните ленту влево 👈) или впишите свой личный вопрос:</div>
 
-  <!-- Быстрые темы -->
   <div class="chips-row" id="chips">
     <div class="chip active" data-q="Общий расклад на текущий период">✨ Вектор дня</div>
     <div class="chip" data-q="Отношения и взаимные чувства">❤️ Любовь</div>
@@ -344,14 +397,19 @@
 
   <!-- ШАГ 2 -->
   <div class="step-label">Шаг 2: Выбор пути</div>
-  <div class="hint-text">Сконцентрируйтесь на вопросе и вытяните <b>ровно 3 карты</b> из колоды ниже:</div>
+  <div class="hint-text">Сконцентрируйтесь на вопросе. Вытяните <b>ровно 3 карты</b> из колоды внизу.</div>
 
-  <!-- 3 слота под карты -->
+  <!-- Подпись зоны вытянутых карт -->
+  <div class="zone-label">▼ Ваши карты (Расклад) ▼</div>
+  
   <div class="slots">
     <div class="slot" id="slot-0"><span class="slot-num">Суть</span></div>
     <div class="slot" id="slot-1"><span class="slot-num">Фокус</span></div>
     <div class="slot" id="slot-2"><span class="slot-num">Совет</span></div>
   </div>
+
+  <!-- Подпись зоны самой колоды -->
+  <div class="zone-label">▼ Колода (Нажмите для выбора) ▼</div>
 
   <!-- Интерактивная колода -->
   <div class="deck-grid" id="deckGrid"></div>
