@@ -357,15 +357,27 @@
     const resultCard = document.getElementById("resultCard");
     const resultText = document.getElementById("resultText");
 
-    // Обработка чипов
-    document.querySelectorAll(".chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
-        queryInput.value = chip.dataset.q;
-        tg?.HapticFeedback?.selectionChanged();
-      });
-    });
+// Обработка чипов
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    queryInput.value = chip.dataset.q;
+    tg?.HapticFeedback?.selectionChanged();
+
+    // НОВАЯ ЛОГИКА: Если расклад уже был сделан, сбрасываем стол для новой темы
+    if (selectedCards.length === 3) {
+      resetSpread();
+    }
+  });
+});
+
+// То же самое для ручного ввода текста (если человек напечатал новый вопрос и нажал Enter):
+queryInput.addEventListener("change", () => {
+    if (selectedCards.length === 3) {
+      resetSpread();
+    }
+});
 
     function initDeck() {
       deckGrid.innerHTML = "";
