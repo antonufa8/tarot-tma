@@ -284,14 +284,51 @@
       0%, 100% { transform: scale(0.9); opacity: 0.7; }
       50% { transform: scale(1.15); opacity: 1; }
     }
+    /* Навигация по шагам */
+    .step-label {
+      width: 100%;
+      max-width: 400px;
+      font-size: 12px;
+      color: var(--accent-glow);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .step-label::before {
+      content: "";
+      display: inline-block;
+      width: 18px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
 
-  <header>
+<header>
     <h1>Нити Судьбы</h1>
-    <p class="subtitle">Твой персональный AI-оракул</p>
+    <p class="subtitle">Твой персональный цифровой Оракул</p>
   </header>
+
+  <!-- ШАГ 1 -->
+  <div class="step-label">Шаг 1: Фокус запроса</div>
+  <div class="hint-text">Выберите готовую тему (смахните ленту влево 👈) или впишите свой личный вопрос:</div>
 
   <!-- Быстрые темы -->
   <div class="chips-row" id="chips">
@@ -302,8 +339,12 @@
   </div>
 
   <div class="input-box">
-    <input type="text" id="queryInput" value="Общий расклад на текущий период" placeholder="Или напишите свой вопрос..." />
+    <input type="text" id="queryInput" value="Общий расклад на текущий период" placeholder="Напишите свой вопрос сюда..." />
   </div>
+
+  <!-- ШАГ 2 -->
+  <div class="step-label">Шаг 2: Выбор пути</div>
+  <div class="hint-text">Сконцентрируйтесь на вопросе и вытяните <b>ровно 3 карты</b> из колоды ниже:</div>
 
   <!-- 3 слота под карты -->
   <div class="slots">
