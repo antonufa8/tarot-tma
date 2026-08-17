@@ -3,31 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Cyber Tarot Portal</title>
-  <!-- Telegram WebApp SDK -->
+  <title>Нити Судьбы</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #090a10;
-      --card-bg: #141624;
-      --accent: #8a2be2;
-      --accent-glow: #00f2fe;
-      --gold: #ffd700;
-      --text: #f0f3f8;
-      --text-muted: #8e95aa;
+      --bg: #0d0f18;
+      --card-bg: #161a2b;
+      --accent: #9d4edd;
+      --accent-glow: #e0aaff;
+      --gold: #ffb703;
+      --text: #f8f9fa;
+      --text-muted: #94a3b8;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
     body {
-      background: radial-gradient(circle at top, #191c38 0%, var(--bg) 100%);
+      background: radial-gradient(circle at top center, #241442 0%, var(--bg) 80%);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -39,58 +38,84 @@
 
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin: 12px 0 18px 0;
     }
 
     h1 {
-      font-size: 24px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #00f2fe, #4facfe, #8a2be2);
+      font-size: 26px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffb703, #e0aaff, #9d4edd);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     p.subtitle {
       font-size: 13px;
       color: var(--text-muted);
+      margin-top: 4px;
     }
 
-    /* Query Box */
-    .query-card {
+    /* Быстрые темы */
+    .chips-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
       width: 100%;
       max-width: 400px;
-      background: rgba(20, 22, 36, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .chips-row::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #cbd5e1;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      border-color: var(--accent-glow);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+    }
+
+    /* Ввод вопроса */
+    .input-box {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 18px;
     }
 
     input[type="text"] {
       width: 100%;
-      background: rgba(10, 11, 18, 0.8);
-      border: 1px solid rgba(138, 43, 226, 0.3);
-      border-radius: 12px;
+      background: rgba(22, 26, 43, 0.8);
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      border-radius: 14px;
       padding: 12px 14px;
       color: #fff;
       font-size: 14px;
       outline: none;
-      transition: all 0.3s;
+      transition: 0.3s;
       user-select: text;
     }
 
     input[type="text"]:focus {
       border-color: var(--accent-glow);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+      box-shadow: 0 0 12px rgba(224, 170, 255, 0.2);
     }
 
-    /* Slots */
-    .slots-container {
+    /* Слоты под 3 карты */
+    .slots {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -102,44 +127,35 @@
     .slot {
       flex: 1;
       aspect-ratio: 2/3;
-      border: 1.5px dashed rgba(138, 43, 226, 0.4);
+      border: 1.5px dashed rgba(157, 78, 221, 0.4);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background: rgba(22, 26, 43, 0.4);
+      transition: all 0.3s;
       padding: 6px;
       text-align: center;
-      background: rgba(20, 22, 36, 0.3);
-      position: relative;
     }
 
-    .slot-label {
+    .slot-num {
       font-size: 10px;
       color: var(--gold);
+      font-weight: 800;
       text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 4px;
     }
 
-    /* Interactive Card Grid */
-    .deck-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #c4b5fd;
-    }
-
+    /* Сетка колоды */
     .deck-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       width: 100%;
       max-width: 400px;
-      margin-bottom: 80px;
+      margin-bottom: 20px;
     }
 
-    /* Card 3D Flip */
     .tarot-card {
       aspect-ratio: 2/3;
       perspective: 1000px;
@@ -150,8 +166,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      text-align: center;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
       border-radius: 10px;
     }
@@ -164,109 +179,154 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     }
 
     .card-back {
-      background: linear-gradient(135deg, #1b1035, #0d071e);
-      border: 1px solid rgba(138, 43, 226, 0.5);
+      background: linear-gradient(135deg, #1f1435, #100a20);
+      border: 1px solid rgba(157, 78, 221, 0.4);
       color: var(--accent-glow);
-      font-size: 20px;
     }
-
     .card-back::after {
       content: "✦";
-      font-size: 16px;
+      font-size: 14px;
       color: var(--gold);
     }
 
     .card-front {
-      background: linear-gradient(145deg, #1f2238, #111322);
+      background: linear-gradient(145deg, #231c38, #131024);
       border: 1.5px solid var(--gold);
       transform: rotateY(180deg);
-      justify-content: space-between;
+      justify-content: space-around;
+      padding: 4px;
     }
 
-    .card-glyph {
-      font-size: 24px;
-      margin-top: 4px;
-    }
-
-    .card-name {
-      font-size: 9px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.1;
-      margin-bottom: 4px;
-    }
-
-    /* Bottom Action Button */
-    .action-btn {
-      position: fixed;
-      bottom: 20px;
-      width: calc(100% - 32px);
+    /* Окно результата прямо внутри Mini App */
+    .result-container {
+      display: none;
+      width: 100%;
       max-width: 400px;
-      background: linear-gradient(135deg, #8a2be2, #00f2fe);
-      border: none;
-      border-radius: 14px;
-      padding: 16px;
-      color: #fff;
+      background: rgba(22, 26, 43, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      margin-top: 10px;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 16px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 8px 24px rgba(138, 43, 226, 0.5);
-      cursor: pointer;
-      opacity: 0.4;
-      pointer-events: none;
-      transition: all 0.3s;
+      color: var(--gold);
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
     }
 
-    .action-btn.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(-2px);
+    .result-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+    }
+
+    /* Кнопки */
+    .btn {
+      width: 100%;
+      max-width: 400px;
+      background: linear-gradient(135deg, #9d4edd, #ffb703);
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
+      transition: all 0.2s;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    /* Лоадер */
+    .loading-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .orb {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #e0aaff 0%, #9d4edd 70%);
+      box-shadow: 0 0 25px #9d4edd;
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.15); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Cyber Tarot</h1>
-    <p class="subtitle">AI-Оракул Нового Поколения</p>
+    <h1>Нити Судьбы</h1>
+    <p class="subtitle">Твой персональный AI-оракул</p>
   </header>
 
-  <div class="query-card">
-    <input type="text" id="userQuery" placeholder="Сформулируйте запрос или вопрос..." />
+  <!-- Быстрые темы -->
+  <div class="chips-row" id="chips">
+    <div class="chip active" data-q="Общий расклад на текущий период">✨ Вектор дня</div>
+    <div class="chip" data-q="Отношения и взаимные чувства">❤️ Любовь</div>
+    <div class="chip" data-q="Финансы, карьера и новые проекты">💼 Деньги & Карьера</div>
+    <div class="chip" data-q="Принятие важного решения и скрытые факторы">⚖️ Выбор пути</div>
   </div>
 
-  <div class="slots-container">
-    <div class="slot" id="slot-0">
-      <span class="slot-label">Истоки</span>
-      <span style="font-size:12px; color: var(--text-muted);">I</span>
-    </div>
-    <div class="slot" id="slot-1">
-      <span class="slot-label">Вызов</span>
-      <span style="font-size:12px; color: var(--text-muted);">II</span>
-    </div>
-    <div class="slot" id="slot-2">
-      <span class="slot-label">Вектор</span>
-      <span style="font-size:12px; color: var(--text-muted);">III</span>
-    </div>
+  <div class="input-box">
+    <input type="text" id="queryInput" value="Общий расклад на текущий период" placeholder="Или напишите свой вопрос..." />
   </div>
 
-  <div class="deck-title">Выберите 3 карты из колоды:</div>
+  <!-- 3 слота под карты -->
+  <div class="slots">
+    <div class="slot" id="slot-0"><span class="slot-num">Суть</span></div>
+    <div class="slot" id="slot-1"><span class="slot-num">Фокус</span></div>
+    <div class="slot" id="slot-2"><span class="slot-num">Совет</span></div>
+  </div>
+
+  <!-- Интерактивная колода -->
   <div class="deck-grid" id="deckGrid"></div>
 
-  <button class="action-btn" id="sendBtn">Получить разбор</button>
+  <!-- Анимация загрузки -->
+  <div class="loading-box" id="loader">
+    <div class="orb"></div>
+    <div style="font-size: 13px; color: var(--accent-glow);">Плетём нити судьбы...</div>
+  </div>
+
+  <!-- Результат прямо в приложении -->
+  <div class="result-container" id="resultCard">
+    <div class="result-header">🔮 Послание Оракула</div>
+    <div class="result-text" id="resultText"></div>
+    <button class="btn" onclick="resetSpread()">Сделать новый расклад</button>
+  </div>
 
   <script>
     const tg = window.Telegram?.WebApp;
@@ -275,89 +335,122 @@
       tg.expand();
     }
 
-    const ARCANA = [
-      { name: "Шут", glyph: "🃏" },
-      { name: "Маг", glyph: "🪄" },
-      { name: "Жрица", glyph: "🌙" },
-      { name: "Императрица", glyph: "👑" },
-      { name: "Император", glyph: "🏛" },
-      { name: "Иерофант", glyph: "🗝" },
-      { name: "Влюбленные", glyph: "❤️" },
-      { name: "Колесница", glyph: "⚡" },
-      { name: "Сила", glyph: "🦁" },
-      { name: "Отшельник", glyph: "🏮" },
-      { name: "Колесо Фортуны", glyph: "☸️" },
-      { name: "Справедливость", glyph: "⚖️" }
+    const CARDS = [
+      { name: "Шут", icon: "🃏" },
+      { name: "Маг", icon: "🪄" },
+      { name: "Жрица", icon: "🌙" },
+      { name: "Императрица", icon: "👑" },
+      { name: "Император", icon: "🏛" },
+      { name: "Иерофант", icon: "🗝" },
+      { name: "Влюбленные", icon: "❤️" },
+      { name: "Колесница", icon: "⚡" },
+      { name: "Сила", icon: "🦁" },
+      { name: "Отшельник", icon: "🏮" },
+      { name: "Колесо Фортуны", icon: "☸️" },
+      { name: "Справедливость", icon: "⚖️" }
     ];
 
-    // Перемешиваем колоду
-    const deck = [...ARCANA].sort(() => Math.random() - 0.5);
-    const selectedCards = [];
+    let selectedCards = [];
+    const queryInput = document.getElementById("queryInput");
     const deckGrid = document.getElementById("deckGrid");
-    const sendBtn = document.getElementById("sendBtn");
-    const userQueryInput = document.getElementById("userQuery");
+    const loader = document.getElementById("loader");
+    const resultCard = document.getElementById("resultCard");
+    const resultText = document.getElementById("resultText");
 
-    // Отрисовка колоды
-    deck.forEach((card, index) => {
-      const cardEl = document.createElement("div");
-      cardEl.className = "tarot-card";
-      cardEl.innerHTML = `
-        <div class="card-inner">
-          <div class="card-back"></div>
-          <div class="card-front">
-            <div class="card-glyph">${card.glyph}</div>
-            <div class="card-name">${card.name}</div>
-          </div>
-        </div>
-      `;
-
-      cardEl.addEventListener("click", () => selectCard(cardEl, card));
-      deckGrid.appendChild(cardEl);
+    // Обработка чипов
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        queryInput.value = chip.dataset.q;
+        tg?.HapticFeedback?.selectionChanged();
+      });
     });
 
-    function selectCard(element, card) {
-      if (element.classList.contains("flipped") || selectedCards.length >= 3) return;
+    function initDeck() {
+      deckGrid.innerHTML = "";
+      selectedCards = [];
+      const shuffled = [...CARDS].sort(() => Math.random() - 0.5);
 
-      // Haptic feedback в Telegram
+      shuffled.forEach(card => {
+        const el = document.createElement("div");
+        el.className = "tarot-card";
+        el.innerHTML = `
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div style="font-size: 20px;">${card.icon}</div>
+              <div style="font-size: 9px; font-weight: 700;">${card.name}</div>
+            </div>
+          </div>
+        `;
+        el.addEventListener("click", () => pickCard(el, card));
+        deckGrid.appendChild(el);
+      });
+    }
+
+    function pickCard(el, card) {
+      if (el.classList.contains("flipped") || selectedCards.length >= 3) return;
+
       tg?.HapticFeedback?.impactOccurred("medium");
-
-      element.classList.add("flipped");
+      el.classList.add("flipped");
       selectedCards.push(card.name);
 
-      // Обновляем слот
-      const slotIndex = selectedCards.length - 1;
-      const slot = document.getElementById(`slot-${slotIndex}`);
+      const idx = selectedCards.length - 1;
+      const slot = document.getElementById(`slot-${idx}`);
       slot.innerHTML = `
-        <span class="slot-label">${slotIndex === 0 ? "Истоки" : slotIndex === 1 ? "Вызов" : "Вектор"}</span>
-        <div style="font-size:20px; margin:2px 0;">${card.glyph}</div>
-        <div style="font-size:10px; font-weight:700; color:#fff;">${card.name}</div>
+        <span class="slot-num">${idx === 0 ? "Суть" : idx === 1 ? "Фокус" : "Совет"}</span>
+        <div style="font-size: 18px; margin: 2px 0;">${card.icon}</div>
+        <div style="font-size: 9px; font-weight: 700; color: #fff;">${card.name}</div>
       `;
       slot.style.border = "1.5px solid var(--gold)";
-      slot.style.background = "rgba(138, 43, 226, 0.2)";
+      slot.style.background = "rgba(157, 78, 221, 0.25)";
 
       if (selectedCards.length === 3) {
-        sendBtn.classList.add("active");
         tg?.HapticFeedback?.notificationOccurred("success");
+        deckGrid.style.display = "none";
+        fetchReading();
       }
     }
 
-    sendBtn.addEventListener("click", () => {
-      if (selectedCards.length < 3) return;
+    async function fetchReading() {
+      loader.style.display = "flex";
+      const query = queryInput.value.trim() || "Общий расклад";
 
-      const payload = {
-        query: userQueryInput.value.trim() || "Общая ситуация и жизненный баланс",
-        cards: selectedCards
-      };
-
-      tg?.HapticFeedback?.impactOccurred("heavy");
-      
-      // Отправляем данные в бота
-      if (tg && tg.sendData) {
-        tg.sendData(JSON.stringify(payload));
-      } else {
-        alert("Данные для бота: " + JSON.stringify(payload));
+      // Если бот запущен на вашем сервере с FastAPI (или через Cloudflare/ngrok):
+      // Замените на URL вашего сервера, если тестируете удаленно.
+      // При работе через sendData можно передавать в чат, а здесь делаем fetch прямо в приложении:
+      try {
+        const response = await fetch("http://localhost:8000/api/tarot-reading", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: query, cards: selectedCards })
+        });
+        
+        const data = await response.json();
+        loader.style.display = "none";
+        resultCard.style.display = "block";
+        resultText.innerText = data.reading;
+      } catch (err) {
+        // Запасной fallback на случай локального теста без FastAPI:
+        loader.style.display = "none";
+        resultCard.style.display = "block";
+        resultText.innerText = "✨ Карты выпали: " + selectedCards.join(" ➔ ") + "\n\n🔍 Суть: Период важных трансформаций и переоценки сил.\n⚡ Главный нюанс: Не спешите с резкими выводами.\n🚀 Точный шаг: Сфокусируйтесь на главном приоритете дня.";
       }
-    });
+    }
+
+    function resetSpread() {
+      resultCard.style.display = "none";
+      deckGrid.style.display = "grid";
+      document.querySelectorAll(".slot").forEach((s, i) => {
+        s.innerHTML = `<span class="slot-num">${i === 0 ? "Суть" : i === 1 ? "Фокус" : "Совет"}</span>`;
+        s.style.border = "1.5px dashed rgba(157, 78, 221, 0.4)";
+        s.style.background = "rgba(22, 26, 43, 0.4)";
+      });
+      initDeck();
+    }
+
+    initDeck();
   </script>
 </body>
 </html>
