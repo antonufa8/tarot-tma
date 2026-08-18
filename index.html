@@ -553,7 +553,7 @@ function pickCard(el, card) {
       // Замените на URL вашего сервера, если тестируете удаленно.
       // При работе через sendData можно передавать в чат, а здесь делаем fetch прямо в приложении:
       try {
-        const response = await fetch("http://localhost:8000/api/tarot-reading", {
+        const response = await fetch("http://146.0.79.189:8000/api/tarot-reading", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: query, cards: selectedCards })
