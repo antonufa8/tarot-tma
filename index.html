@@ -556,24 +556,24 @@ async function fetchReading() {
           body: JSON.stringify({ query: query, cards: selectedCards })
         });
 
-        // Если сервер вернул ошибку 500, 503 или 404 — принудительно уходим в fallback
         if (!response.ok) {
           throw new Error(`Server returned status ${response.status}`);
         }
         
         const data = await response.json();
         
-        // Проверяем наличие текста в поле reading
-        if (!data || !data.reading) {
+        // Извлекаем текст: если бэкенд вернул строку — берем её, если объект — берем data.reading/data.text
+        const readingText = typeof data === "string" ? data : (data.reading || data.text || data.prediction || data.result);
+
+        if (!readingText) {
           throw new Error("Empty reading received");
         }
 
         loader.style.display = "none";
         resultCard.style.display = "block";
-        resultText.innerText = data.reading;
+        resultText.innerText = readingText;
 
       } catch (err) {
-        // Fallback срабатывает как при ошибке сети, так и при перегрузке Gemini
         console.warn("Фаллбэк предсказания из-за ошибки:", err);
         loader.style.display = "none";
         resultCard.style.display = "block";
