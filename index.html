@@ -545,26 +545,36 @@ function pickCard(el, card) {
       }
     }
 
-    async function fetchReading() {
+async function fetchReading() {
       loader.style.display = "flex";
       const query = queryInput.value.trim() || "Общий расклад";
 
-      // Если бот запущен на вашем сервере с FastAPI (или через Cloudflare/ngrok):
-      // Замените на URL вашего сервера, если тестируете удаленно.
-      // При работе через sendData можно передавать в чат, а здесь делаем fetch прямо в приложении:
       try {
         const response = await fetch("https://smartphone-fan.site/api/tarot-reading", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: query, cards: selectedCards })
         });
+
+        // Если сервер вернул ошибку 500, 503 или 404 — принудительно уходим в fallback
+        if (!response.ok) {
+          throw new Error(`Server returned status ${response.status}`);
+        }
         
         const data = await response.json();
+        
+        // Проверяем наличие текста в поле reading
+        if (!data || !data.reading) {
+          throw new Error("Empty reading received");
+        }
+
         loader.style.display = "none";
         resultCard.style.display = "block";
         resultText.innerText = data.reading;
+
       } catch (err) {
-        // Запасной fallback на случай локального теста без FastAPI:
+        // Fallback срабатывает как при ошибке сети, так и при перегрузке Gemini
+        console.warn("Фаллбэк предсказания из-за ошибки:", err);
         loader.style.display = "none";
         resultCard.style.display = "block";
         resultText.innerText = "✨ Карты выпали: " + selectedCards.join(" ➔ ") + "\n\n🔍 Суть: Период важных трансформаций и переоценки сил.\n⚡ Главный нюанс: Не спешите с резкими выводами.\n🚀 Точный шаг: Сфокусируйтесь на главном приоритете дня.";
