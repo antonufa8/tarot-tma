@@ -38,7 +38,6 @@
       position: relative;
     }
 
-    /* Шапка по центру */
     header {
       width: 100%;
       max-width: 400px;
@@ -71,7 +70,6 @@
       text-align: center;
     }
 
-    /* Искры по краям */
     .spark-svg {
       width: 22px;
       height: 22px;
@@ -79,7 +77,6 @@
     }
     .spark-right { transform: scaleX(-1); }
 
-    /* Современный плавающий AI-Глаз в правом верхнем углу */
     .modern-oracle-eye {
       position: absolute;
       top: 0;
@@ -127,7 +124,6 @@
       70% { transform: translate(-1.5px, 1px); }
     }
 
-    /* Быстрые темы */
     .chips-row {
       display: flex;
       gap: 8px;
@@ -160,7 +156,6 @@
       box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
     }
 
-    /* Ввод вопроса */
     .input-box {
       width: 100%;
       max-width: 400px;
@@ -185,7 +180,6 @@
       box-shadow: 0 0 12px rgba(224, 170, 255, 0.2);
     }
 
-    /* Слоты под 3 карты */
     .slots {
       display: flex;
       justify-content: center;
@@ -217,7 +211,6 @@
       text-transform: uppercase;
     }
 
-    /* Сетка колоды */
     .deck-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -276,6 +269,83 @@
       transform: rotateY(180deg);
       justify-content: space-around;
       padding: 4px;
+    }
+
+    /* Современная анимация плетения нитей */
+    .loading-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .threads-weaver {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thread-core {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffb703 0%, #9d4edd 80%);
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.8), 0 0 35px rgba(0, 242, 254, 0.4);
+      animation: corePulse 2s ease-in-out infinite alternate;
+    }
+
+    .thread-orbit {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(224, 170, 255, 0.6);
+      box-sizing: border-box;
+    }
+
+    .thread-orbit-1 {
+      width: 48px;
+      height: 48px;
+      border-color: rgba(0, 242, 254, 0.7);
+      animation: spinThread 4s linear infinite;
+    }
+
+    .thread-orbit-2 {
+      width: 62px;
+      height: 62px;
+      border-color: rgba(255, 183, 3, 0.6);
+      animation: spinThreadRev 6s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #e0aaff, #00f2fe, #ffb703, #e0aaff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmerText 3s linear infinite;
+    }
+
+    @keyframes corePulse {
+      0% { transform: scale(0.85); opacity: 0.8; }
+      100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px #ffb703); }
+    }
+
+    @keyframes spinThread {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinThreadRev {
+      100% { transform: rotate(-360deg); }
+    }
+
+    @keyframes shimmerText {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
     }
 
     /* Окно результата */
@@ -354,29 +424,6 @@
     }
     .btn:active { transform: scale(0.98); }
 
-    /* Лоадер */
-    .loading-box {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin: 24px 0;
-    }
-
-    .orb {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #00f2fe 0%, #9d4edd 70%);
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
-      animation: pulse 1.5s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(0.9); opacity: 0.7; }
-      50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 15px #e0aaff); }
-    }
-
     .step-label {
       width: 100%;
       max-width: 400px;
@@ -428,7 +475,6 @@
 <body>
 
   <header>
-    <!-- Центрированный заголовок с искрами -->
     <div class="title-row">
       <svg class="spark-svg" viewBox="0 0 50 50" fill="none">
         <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#sparkGrad)"/>
@@ -443,19 +489,13 @@
       </svg>
     </div>
     
-    <!-- Выровненный по центру подзаголовок -->
     <p class="subtitle">Твой персональный цифровой Оракул</p>
 
-    <!-- Современный Неоновый Кибер-Глаз Оракула справа в углу -->
     <div class="modern-oracle-eye" title="Cyber Oracle Active">
       <svg class="eye-hologram" viewBox="0 0 50 50" fill="none">
-        <!-- Внешнее вращающееся кольцо глифов -->
         <circle class="ring-rotate" cx="25" cy="25" r="22" stroke="url(#eyeGrad)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.75"/>
-        <!-- Ромбовидный контур ока -->
         <path d="M7 25 C15 13, 35 13, 43 25 C35 37, 15 37, 7 25 Z" stroke="#e0aaff" stroke-width="1.5" fill="#130e24" opacity="0.9"/>
-        <!-- Пульсирующая диафрагма -->
         <circle class="core-pulse" cx="25" cy="25" r="8.5" fill="url(#irisGrad)" stroke="#ffb703" stroke-width="1"/>
-        <!-- Зрачок с плавающим взглядом -->
         <g class="pupil-track">
           <circle cx="25" cy="25" r="4" fill="#0d0f18"/>
           <circle cx="23.8" cy="23.8" r="1.5" fill="#00f2fe"/>
@@ -510,10 +550,14 @@
   
   <div class="deck-grid" id="deckGrid"></div>
   
-  <!-- Анимация загрузки -->
+  <!-- Обновленная анимация: Плетение нитей судьбы -->
   <div class="loading-box" id="loader">
-    <div class="orb"></div>
-    <div style="font-size: 13px; color: var(--accent-glow);">Плетём нити судьбы...</div>
+    <div class="threads-weaver">
+      <div class="thread-orbit thread-orbit-2"></div>
+      <div class="thread-orbit thread-orbit-1"></div>
+      <div class="thread-core"></div>
+    </div>
+    <div class="loading-text">Плетём нити судьбы...</div>
   </div>
 
   <!-- Результат -->
@@ -555,7 +599,6 @@
     const resultText = document.getElementById("resultText");
     const cardsBadge = document.getElementById("cardsBadge");
 
-    // Обработка чипов
     document.querySelectorAll(".chip").forEach(chip => {
       chip.addEventListener("click", () => {
         document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
@@ -630,7 +673,6 @@
       }
     }
 
-    // Форматирование Markdown в HTML
     function formatMarkdown(text) {
       return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -643,8 +685,8 @@
       loader.style.display = "flex";
       const query = queryInput.value.trim() || "Общий расклад";
 
-      // Гарантируем задержку минимум в 5 секунд (5000 мс) для драматического эффекта Оракула
-      const minDelayPromise = new Promise(resolve => setTimeout(resolve, 5000));
+      // ТАЙМЕР ЗАДЕРЖКИ: 10000 мс = 10 секунд
+      const minDelayPromise = new Promise(resolve => setTimeout(resolve, 10000));
 
       const apiPromise = fetch("https://smartphone-fan.site/api/tarot-reading", {
         method: "POST",
@@ -656,7 +698,6 @@
       });
 
       try {
-        // Ждем завершения обоих промисов (запрос + минимальная пауза 5 сек)
         const [_, data] = await Promise.all([minDelayPromise, apiPromise]);
         
         const readingText = typeof data === "string" ? data : (data.reading || data.text || data.prediction || data.result);
@@ -671,7 +712,6 @@
         resultText.innerHTML = formatMarkdown(readingText);
 
       } catch (err) {
-        // При ошибке или fallback также соблюдается пауза
         await minDelayPromise;
         console.warn("Фаллбэк предсказания:", err);
         loader.style.display = "none";
