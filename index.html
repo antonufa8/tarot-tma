@@ -35,90 +35,96 @@
       align-items: center;
       padding: 16px;
       overflow-x: hidden;
+      position: relative;
     }
 
+    /* Шапка по центру */
     header {
       width: 100%;
       max-width: 400px;
+      text-align: center;
       margin: 8px 0 16px 0;
+      position: relative;
     }
 
-    .header-layout {
+    .title-row {
       display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 0 4px;
-    }
-
-    .title-group {
-      text-align: left;
-      flex: 1;
+      gap: 10px;
+      margin-bottom: 4px;
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 25px;
       font-weight: 900;
       background: linear-gradient(135deg, #ffb703, #e0aaff, #9d4edd);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 0.5px;
-      line-height: 1.2;
     }
 
     p.subtitle {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
       margin-top: 2px;
+      text-align: center;
     }
 
-    /* Анимация спокойного AI Оракула */
-    .oracle-badge {
-      position: relative;
-      width: 44px;
-      height: 44px;
+    /* Искры по краям */
+    .spark-svg {
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(0 0 6px rgba(157, 78, 221, 0.5));
+    }
+    .spark-right { transform: scaleX(-1); }
+
+    /* Современный плавающий AI-Глаз в правом верхнем углу */
+    .modern-oracle-eye {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 38px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
 
-    .oracle-aura {
-      position: absolute;
+    .eye-hologram {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(157, 78, 221, 0.4) 0%, rgba(0, 242, 254, 0.1) 70%, transparent 100%);
-      animation: auraBreathe 3.5s infinite ease-in-out;
+      filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.5));
     }
 
-    .oracle-svg {
-      width: 36px;
-      height: 36px;
-      z-index: 2;
-      animation: floatOracle 4s infinite ease-in-out;
-      filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.6));
-    }
-
-    .oracle-pupil {
-      animation: eyeGaze 5s infinite ease-in-out;
+    .ring-rotate {
+      animation: spinRing 12s linear infinite;
       transform-origin: 25px 25px;
     }
 
-    @keyframes auraBreathe {
-      0%, 100% { transform: scale(0.9); opacity: 0.5; }
-      50% { transform: scale(1.25); opacity: 0.95; }
+    .core-pulse {
+      animation: irisPulse 3s ease-in-out infinite;
+      transform-origin: 25px 25px;
     }
 
-    @keyframes floatOracle {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-4px) rotate(2deg); }
+    .pupil-track {
+      animation: lookAround 4.5s ease-in-out infinite;
+      transform-origin: 25px 25px;
     }
 
-    @keyframes eyeGaze {
+    @keyframes spinRing {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes irisPulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 4px #00f2fe); }
+    }
+
+    @keyframes lookAround {
       0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(1px, -1px); }
-      75% { transform: translate(-1px, 1px); }
+      30% { transform: translate(1.5px, -1px); }
+      70% { transform: translate(-1.5px, 1px); }
     }
 
     /* Быстрые темы */
@@ -278,7 +284,7 @@
       width: 100%;
       max-width: 400px;
       background: rgba(22, 26, 43, 0.95);
-      border: 1px solid rgba(157, 78, 221, 0.3);
+      border: 1px solid rgba(157, 78, 221, 0.35);
       border-radius: 18px;
       padding: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.6);
@@ -319,6 +325,17 @@
       margin-bottom: 10px;
     }
 
+    .cards-drawn-badge {
+      background: rgba(157, 78, 221, 0.15);
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--accent-glow);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
     .btn {
       width: 100%;
       max-width: 400px;
@@ -343,19 +360,21 @@
       flex-direction: column;
       align-items: center;
       gap: 12px;
-      margin: 20px 0;
+      margin: 24px 0;
     }
+
     .orb {
-      width: 45px;
-      height: 45px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: radial-gradient(circle, #e0aaff 0%, #9d4edd 70%);
-      box-shadow: 0 0 25px #9d4edd;
-      animation: pulse 1.4s infinite ease-in-out;
+      background: radial-gradient(circle, #00f2fe 0%, #9d4edd 70%);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+      animation: pulse 1.5s infinite ease-in-out;
     }
+
     @keyframes pulse {
       0%, 100% { transform: scale(0.9); opacity: 0.7; }
-      50% { transform: scale(1.15); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 15px #e0aaff); }
     }
 
     .step-label {
@@ -409,40 +428,54 @@
 <body>
 
   <header>
-    <div class="header-layout">
-      <div class="title-group">
-        <h1>Нити Судьбы</h1>
-        <p class="subtitle">Твой персональный цифровой Оракул</p>
-      </div>
+    <!-- Центрированный заголовок с искрами -->
+    <div class="title-row">
+      <svg class="spark-svg" viewBox="0 0 50 50" fill="none">
+        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#sparkGrad)"/>
+        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
+      </svg>
 
-      <!-- Анимированный Оракул Таролог (Справа на одном уровне) -->
-      <div class="oracle-badge" title="AI Оракул">
-        <div class="oracle-aura"></div>
-        <svg class="oracle-svg" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Контур всевидящего ока / кристалла -->
-          <path d="M25 6 C12 6, 2 25, 2 25 C2 25, 12 44, 25 44 C38 44, 48 25, 48 25 C48 25, 38 6, 25 6 Z" 
-                stroke="url(#oracleGrad)" stroke-width="2" fill="#130e24"/>
-          <!-- Золотой обод радужки -->
-          <circle cx="25" cy="25" r="9" stroke="#ffb703" stroke-width="1.5" fill="none" opacity="0.8"/>
-          <!-- Ядро AI-ока -->
-          <circle class="oracle-pupil" cx="25" cy="25" r="4.5" fill="url(#coreGrad)"/>
-          <!-- Искры озарения -->
-          <circle cx="23.5" cy="23.5" r="1.5" fill="#ffffff"/>
-          <path d="M25 0 L27 4 L25 2 L23 4 Z" fill="#ffb703"/>
-          <path d="M25 50 L27 46 L25 48 L23 46 Z" fill="#ffb703"/>
-          <defs>
-            <linearGradient id="oracleGrad" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#00f2fe"/>
-              <stop offset="0.5" stop-color="#9d4edd"/>
-              <stop offset="1" stop-color="#ffb703"/>
-            </linearGradient>
-            <linearGradient id="coreGrad" x1="20" y1="20" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#00f2fe"/>
-              <stop offset="1" stop-color="#9d4edd"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+      <h1>Нити Судьбы</h1>
+
+      <svg class="spark-svg spark-right" viewBox="0 0 50 50" fill="none">
+        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#sparkGrad)"/>
+        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
+      </svg>
+    </div>
+    
+    <!-- Выровненный по центру подзаголовок -->
+    <p class="subtitle">Твой персональный цифровой Оракул</p>
+
+    <!-- Современный Неоновый Кибер-Глаз Оракула справа в углу -->
+    <div class="modern-oracle-eye" title="Cyber Oracle Active">
+      <svg class="eye-hologram" viewBox="0 0 50 50" fill="none">
+        <!-- Внешнее вращающееся кольцо глифов -->
+        <circle class="ring-rotate" cx="25" cy="25" r="22" stroke="url(#eyeGrad)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.75"/>
+        <!-- Ромбовидный контур ока -->
+        <path d="M7 25 C15 13, 35 13, 43 25 C35 37, 15 37, 7 25 Z" stroke="#e0aaff" stroke-width="1.5" fill="#130e24" opacity="0.9"/>
+        <!-- Пульсирующая диафрагма -->
+        <circle class="core-pulse" cx="25" cy="25" r="8.5" fill="url(#irisGrad)" stroke="#ffb703" stroke-width="1"/>
+        <!-- Зрачок с плавающим взглядом -->
+        <g class="pupil-track">
+          <circle cx="25" cy="25" r="4" fill="#0d0f18"/>
+          <circle cx="23.8" cy="23.8" r="1.5" fill="#00f2fe"/>
+        </g>
+        <defs>
+          <linearGradient id="sparkGrad" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00f2fe"/>
+            <stop offset="1" stop-color="#9d4edd"/>
+          </linearGradient>
+          <linearGradient id="eyeGrad" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00f2fe"/>
+            <stop offset="0.5" stop-color="#9d4edd"/>
+            <stop offset="1" stop-color="#ffb703"/>
+          </linearGradient>
+          <linearGradient id="irisGrad" x1="16" y1="16" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00f2fe"/>
+            <stop offset="1" stop-color="#7b2cbf"/>
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   </header>
 
@@ -486,6 +519,7 @@
   <!-- Результат -->
   <div class="result-container" id="resultCard">
     <div class="result-header">🔮 Послание Оракула</div>
+    <div class="cards-drawn-badge" id="cardsBadge"></div>
     <div class="result-text" id="resultText"></div>
     <button class="btn" onclick="resetSpread()">Сделать новый расклад</button>
   </div>
@@ -519,6 +553,7 @@
     const loader = document.getElementById("loader");
     const resultCard = document.getElementById("resultCard");
     const resultText = document.getElementById("resultText");
+    const cardsBadge = document.getElementById("cardsBadge");
 
     // Обработка чипов
     document.querySelectorAll(".chip").forEach(chip => {
@@ -595,7 +630,7 @@
       }
     }
 
-    // Красивое форматирование Markdown в HTML
+    // Форматирование Markdown в HTML
     function formatMarkdown(text) {
       return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -608,18 +643,22 @@
       loader.style.display = "flex";
       const query = queryInput.value.trim() || "Общий расклад";
 
-      try {
-        const response = await fetch("https://smartphone-fan.site/api/tarot-reading", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: query, cards: selectedCards })
-        });
+      // Гарантируем задержку минимум в 5 секунд (5000 мс) для драматического эффекта Оракула
+      const minDelayPromise = new Promise(resolve => setTimeout(resolve, 5000));
 
-        if (!response.ok) {
-          throw new Error(`Server status ${response.status}`);
-        }
+      const apiPromise = fetch("https://smartphone-fan.site/api/tarot-reading", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: query, cards: selectedCards })
+      }).then(async res => {
+        if (!res.ok) throw new Error(`Server status ${res.status}`);
+        return res.json();
+      });
+
+      try {
+        // Ждем завершения обоих промисов (запрос + минимальная пауза 5 сек)
+        const [_, data] = await Promise.all([minDelayPromise, apiPromise]);
         
-        const data = await response.json();
         const readingText = typeof data === "string" ? data : (data.reading || data.text || data.prediction || data.result);
 
         if (!readingText) {
@@ -628,17 +667,20 @@
 
         loader.style.display = "none";
         resultCard.style.display = "block";
+        cardsBadge.innerHTML = `✨ <strong>Карты выпали:</strong> ${selectedCards.join(" ➔ ")}`;
         resultText.innerHTML = formatMarkdown(readingText);
 
       } catch (err) {
+        // При ошибке или fallback также соблюдается пауза
+        await minDelayPromise;
         console.warn("Фаллбэк предсказания:", err);
         loader.style.display = "none";
         resultCard.style.display = "block";
+        cardsBadge.innerHTML = `✨ <strong>Карты выпали:</strong> ${selectedCards.join(" ➔ ")}`;
         resultText.innerHTML = formatMarkdown(
-          "✨ **Карты выпали**: " + selectedCards.join(" ➔ ") + "\n\n" +
-          "🔍 **Суть момента**: Период важных трансформаций и переоценки собственных сил.\n\n" +
-          "⚡ **Главный нюанс**: Не спешите с резкими выводами, сохраняйте внутренний баланс.\n\n" +
-          "🚀 **Точный шаг**: Сфокусируйтесь на главном приоритете дня."
+          "🔍 Суть момента: Период важных трансформаций и переоценки собственных сил.\n\n" +
+          "⚡ Главный нюанс: Не спешите с резкими выводами, сохраняйте внутренний баланс.\n\n" +
+          "🚀 Точный шаг: Сфокусируйтесь на главном приоритете дня."
         );
       }
     }
