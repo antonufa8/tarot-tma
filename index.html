@@ -12,6 +12,7 @@
       --accent: #9d4edd;
       --accent-glow: #e0aaff;
       --gold: #ffb703;
+      --cyan: #00f2fe;
       --text: #f8f9fa;
       --text-muted: #94a3b8;
     }
@@ -37,23 +38,87 @@
     }
 
     header {
-      text-align: center;
-      margin: 12px 0 18px 0;
+      width: 100%;
+      max-width: 400px;
+      margin: 8px 0 16px 0;
+    }
+
+    .header-layout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+
+    .title-group {
+      text-align: left;
+      flex: 1;
     }
 
     h1 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 900;
       background: linear-gradient(135deg, #ffb703, #e0aaff, #9d4edd);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 0.5px;
+      line-height: 1.2;
     }
 
     p.subtitle {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 2px;
+    }
+
+    /* Анимация спокойного AI Оракула */
+    .oracle-badge {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .oracle-aura {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(157, 78, 221, 0.4) 0%, rgba(0, 242, 254, 0.1) 70%, transparent 100%);
+      animation: auraBreathe 3.5s infinite ease-in-out;
+    }
+
+    .oracle-svg {
+      width: 36px;
+      height: 36px;
+      z-index: 2;
+      animation: floatOracle 4s infinite ease-in-out;
+      filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.6));
+    }
+
+    .oracle-pupil {
+      animation: eyeGaze 5s infinite ease-in-out;
+      transform-origin: 25px 25px;
+    }
+
+    @keyframes auraBreathe {
+      0%, 100% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.25); opacity: 0.95; }
+    }
+
+    @keyframes floatOracle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(2deg); }
+    }
+
+    @keyframes eyeGaze {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(1px, -1px); }
+      75% { transform: translate(-1px, 1px); }
     }
 
     /* Быстрые темы */
@@ -207,13 +272,13 @@
       padding: 4px;
     }
 
-    /* Окно результата прямо внутри Mini App */
+    /* Окно результата */
     .result-container {
       display: none;
       width: 100%;
       max-width: 400px;
-      background: rgba(22, 26, 43, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(22, 26, 43, 0.95);
+      border: 1px solid rgba(157, 78, 221, 0.3);
       border-radius: 18px;
       padding: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.6);
@@ -242,10 +307,18 @@
       font-size: 14px;
       line-height: 1.6;
       color: #e2e8f0;
-      white-space: pre-wrap;
+      user-select: text;
     }
 
-    /* Кнопки */
+    .result-text strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .result-text p {
+      margin-bottom: 10px;
+    }
+
     .btn {
       width: 100%;
       max-width: 400px;
@@ -284,7 +357,7 @@
       0%, 100% { transform: scale(0.9); opacity: 0.7; }
       50% { transform: scale(1.15); opacity: 1; }
     }
-    /* Навигация по шагам */
+
     .step-label {
       width: 100%;
       max-width: 400px;
@@ -317,27 +390,7 @@
       margin-bottom: 14px;
       line-height: 1.4;
     }
-  /* Выравнивание заголовка и логотипов в одну линию */
-    .title-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
 
-    /* Статичный логотип AI-искры */
-    .logo-svg {
-      width: 26px;
-      height: 26px;
-      filter: drop-shadow(0 0 6px rgba(157, 78, 221, 0.4));
-    }
-    
-    .right-logo {
-      transform: scaleX(-1); /* Зеркалим правую искру для симметрии */
-    }
-
-    /* Подписи к зонам карт */
     .zone-label {
       width: 100%;
       max-width: 400px;
@@ -355,35 +408,42 @@
 </head>
 <body>
 
-<header>
-    <div class="title-row">
-      <!-- Левый логотип (AI-искра) -->
-      <svg class="logo-svg left-logo" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#paint0_linear)"/>
-        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
-        <defs>
-          <linearGradient id="paint0_linear" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#00f2fe"/>
-            <stop offset="1" stop-color="#9d4edd"/>
-          </linearGradient>
-        </defs>
-      </svg>
+  <header>
+    <div class="header-layout">
+      <div class="title-group">
+        <h1>Нити Судьбы</h1>
+        <p class="subtitle">Твой персональный цифровой Оракул</p>
+      </div>
 
-      <h1>Нити Судьбы</h1>
-
-      <!-- Правый логотип (AI-искра) -->
-      <svg class="logo-svg right-logo" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 0 C25 18, 32 25, 50 25 C32 25, 25 32, 25 50 C25 32, 18 25, 0 25 C18 25, 25 18, 25 0 Z" fill="url(#paint0_linear)"/>
-        <circle cx="25" cy="25" r="3.5" fill="#ffb703"/>
-        <defs>
-          <linearGradient id="paint0_linear" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#00f2fe"/>
-            <stop offset="1" stop-color="#9d4edd"/>
-          </linearGradient>
-        </defs>
-      </svg>
+      <!-- Анимированный Оракул Таролог (Справа на одном уровне) -->
+      <div class="oracle-badge" title="AI Оракул">
+        <div class="oracle-aura"></div>
+        <svg class="oracle-svg" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Контур всевидящего ока / кристалла -->
+          <path d="M25 6 C12 6, 2 25, 2 25 C2 25, 12 44, 25 44 C38 44, 48 25, 48 25 C48 25, 38 6, 25 6 Z" 
+                stroke="url(#oracleGrad)" stroke-width="2" fill="#130e24"/>
+          <!-- Золотой обод радужки -->
+          <circle cx="25" cy="25" r="9" stroke="#ffb703" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Ядро AI-ока -->
+          <circle class="oracle-pupil" cx="25" cy="25" r="4.5" fill="url(#coreGrad)"/>
+          <!-- Искры озарения -->
+          <circle cx="23.5" cy="23.5" r="1.5" fill="#ffffff"/>
+          <path d="M25 0 L27 4 L25 2 L23 4 Z" fill="#ffb703"/>
+          <path d="M25 50 L27 46 L25 48 L23 46 Z" fill="#ffb703"/>
+          <defs>
+            <linearGradient id="oracleGrad" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#00f2fe"/>
+              <stop offset="0.5" stop-color="#9d4edd"/>
+              <stop offset="1" stop-color="#ffb703"/>
+            </linearGradient>
+            <linearGradient id="coreGrad" x1="20" y1="20" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#00f2fe"/>
+              <stop offset="1" stop-color="#9d4edd"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
-    <p class="subtitle">Твой персональный цифровой Оракул</p>
   </header>
 
   <!-- ШАГ 1 -->
@@ -405,7 +465,6 @@
   <div class="step-label">Шаг 2: Выбор пути</div>
   <div class="hint-text">Сконцентрируйтесь на вопросе. Вытяните <b>ровно 3 карты</b> из колоды внизу.</div>
 
-  <!-- Подпись зоны вытянутых карт -->
   <div class="zone-label">▼ Ваши карты (Расклад) ▼</div>
   
   <div class="slots">
@@ -414,10 +473,8 @@
     <div class="slot" id="slot-2"><span class="slot-num">Совет</span></div>
   </div>
 
-  <!-- Подпись зоны самой колоды (добавлен ID) -->
   <div class="zone-label" id="deckLabel">▼ Колода (Выберите 3 карты из колоды) ▼</div>
   
-  <!-- Интерактивная колода -->
   <div class="deck-grid" id="deckGrid"></div>
   
   <!-- Анимация загрузки -->
@@ -426,7 +483,7 @@
     <div style="font-size: 13px; color: var(--accent-glow);">Плетём нити судьбы...</div>
   </div>
 
-  <!-- Результат прямо в приложении -->
+  <!-- Результат -->
   <div class="result-container" id="resultCard">
     <div class="result-header">🔮 Послание Оракула</div>
     <div class="result-text" id="resultText"></div>
@@ -463,7 +520,7 @@
     const resultCard = document.getElementById("resultCard");
     const resultText = document.getElementById("resultText");
 
-// Обработка чипов
+    // Обработка чипов
     document.querySelectorAll(".chip").forEach(chip => {
       chip.addEventListener("click", () => {
         document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
@@ -471,28 +528,21 @@
         queryInput.value = chip.dataset.q;
         tg?.HapticFeedback?.selectionChanged();
 
-        // НОВАЯ ЛОГИКА: Сбрасываем стол, если нажали на новую тему после расклада
         if (selectedCards.length === 3) {
           resetSpread();
         }
       });
     });
 
-    // НОВАЯ ЛОГИКА: Сбрасываем стол, если пользователь вручную вписал новый вопрос и нажал Enter
     queryInput.addEventListener("change", () => {
       if (selectedCards.length === 3) {
         resetSpread();
       }
     });
     
-    // НОВАЯ ЛОГИКА: Очищаем поле при клике и убираем активную кнопку
     queryInput.addEventListener("focus", () => {
-      queryInput.value = ""; // Стираем текущий текст
-      
-      // Снимаем выделение со всех кнопок-тем, так как человек вводит свой вопрос
+      queryInput.value = "";
       document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-      
-      // Если расклад уже был сделан, сбрасываем стол
       if (selectedCards.length === 3) {
         resetSpread();
       }
@@ -520,7 +570,7 @@
       });
     }
 
-function pickCard(el, card) {
+    function pickCard(el, card) {
       if (el.classList.contains("flipped") || selectedCards.length >= 3) return;
 
       tg?.HapticFeedback?.impactOccurred("medium");
@@ -540,12 +590,21 @@ function pickCard(el, card) {
       if (selectedCards.length === 3) {
         tg?.HapticFeedback?.notificationOccurred("success");
         deckGrid.style.display = "none";
-        deckLabel.style.display = "none"; // <--- ПРЯЧЕМ НАДПИСЬ
+        deckLabel.style.display = "none";
         fetchReading();
       }
     }
 
-async function fetchReading() {
+    // Красивое форматирование Markdown в HTML
+    function formatMarkdown(text) {
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .split('\n\n')
+        .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br/>')}</p>`)
+        .join('');
+    }
+
+    async function fetchReading() {
       loader.style.display = "flex";
       const query = queryInput.value.trim() || "Общий расклад";
 
@@ -557,34 +616,37 @@ async function fetchReading() {
         });
 
         if (!response.ok) {
-          throw new Error(`Server returned status ${response.status}`);
+          throw new Error(`Server status ${response.status}`);
         }
         
         const data = await response.json();
-        
-        // Извлекаем текст: если бэкенд вернул строку — берем её, если объект — берем data.reading/data.text
         const readingText = typeof data === "string" ? data : (data.reading || data.text || data.prediction || data.result);
 
         if (!readingText) {
-          throw new Error("Empty reading received");
+          throw new Error("Empty text");
         }
 
         loader.style.display = "none";
         resultCard.style.display = "block";
-        resultText.innerText = readingText;
+        resultText.innerHTML = formatMarkdown(readingText);
 
       } catch (err) {
-        console.warn("Фаллбэк предсказания из-за ошибки:", err);
+        console.warn("Фаллбэк предсказания:", err);
         loader.style.display = "none";
         resultCard.style.display = "block";
-        resultText.innerText = "✨ Карты выпали: " + selectedCards.join(" ➔ ") + "\n\n🔍 Суть: Период важных трансформаций и переоценки сил.\n⚡ Главный нюанс: Не спешите с резкими выводами.\n🚀 Точный шаг: Сфокусируйтесь на главном приоритете дня.";
+        resultText.innerHTML = formatMarkdown(
+          "✨ **Карты выпали**: " + selectedCards.join(" ➔ ") + "\n\n" +
+          "🔍 **Суть момента**: Период важных трансформаций и переоценки собственных сил.\n\n" +
+          "⚡ **Главный нюанс**: Не спешите с резкими выводами, сохраняйте внутренний баланс.\n\n" +
+          "🚀 **Точный шаг**: Сфокусируйтесь на главном приоритете дня."
+        );
       }
     }
 
     function resetSpread() {
       resultCard.style.display = "none";
       deckGrid.style.display = "grid";
-      deckLabel.style.display = "block"; // <--- ВОЗВРАЩАЕМ НАДПИСЬ
+      deckLabel.style.display = "block";
 
       document.querySelectorAll(".slot").forEach((s, i) => {
         s.innerHTML = `<span class="slot-num">${i === 0 ? "Суть" : i === 1 ? "Фокус" : "Совет"}</span>`;
